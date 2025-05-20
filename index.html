@@ -8,6 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="Data.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
         
@@ -556,21 +557,6 @@
             background-color: rgba(255,255,255,0.8);
             padding: 2px 5px;
             border-radius: 3px;
-        <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabase = createClient(
-    "https://bwpdoplnlaxrerughatp.supabase.co",
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ3cGRvcGxubGF4cmVydWdoYXRwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDc1MDA2MjUsImV4cCI6MjA2MzA3NjYyNX0.ZLK0GoV2kob_Whocz_QGuUWNLJZ0UUL7LJyt-B1NPcQ"
-  );
-            supabase.auth.getUser()
-        .then(response => {
-            if (!response.error) {
-                console.log("¡Conexión Exitosa!");
-            } else {
-                console.error("Error de conexión:", response.error);
-            }
-        });
-        
         }
     </style>
 </head>
@@ -838,64 +824,9 @@
         </div>
     </div>
 
-    <script>
-        // Data
-        const users = [
-            { username: "JUAN", password: "7294" },
-            { username: "SANTIAGO", password: "3168" },
-            { username: "SOFIA", password: "4835" },
-            { username: "JULIAN", password: "1590" },
-            { username: "INVITADO", password: "6247" }
-        ];
-
-        const tables = [
-            { id: 1, label: "Mesa 1" },
-            { id: 2, label: "Mesa 2" },
-            { id: 3, label: "Mesa 3" },
-            { id: 4, label: "Mesa 4" },
-            { id: 5, label: "Mesa 5" },
-            { id: 6, label: "VIP" }
-        ];
-
-        const products = [
-            { id: 1, name: "Aguila", price: 4000, category: "cerveza" },
-            { id: 2, name: "Poker", price: 4000, category: "cerveza" },
-            { id: 3, name: "Budwaiser", price: 3000, category: "cerveza" },
-            { id: 4, name: "Costena", price: 3000, category: "cerveza" },
-            { id: 5, name: "Coronita", price: 4000, category: "cerveza" },
-            { id: 6, name: "Corona", price: 8000, category: "cerveza" },
-            { id: 7, name: "Stella Artois", price: 8000, category: "cerveza" },
-            { id: 8, name: "1/2 Lider", price: 45000, category: "licor" },
-            { id: 9, name: "1 Lider", price: 85000, category: "licor" },
-            { id: 10, name: "1/2 Ron", price: 40000, category: "licor" },
-            { id: 11, name: "1 Ron", price: 80000, category: "licor" },
-            { id: 12, name: "Buchanan's", price: 220000, category: "licor" },
-            { id: 13, name: "Onix Negro", price: 80000, category: "licor" },
-            { id: 14, name: "Bacardi", price: 80000, category: "licor" },
-            { id: 15, name: "Onix Amarillo", price: 90000, category: "licor" },
-            { id: 16, name: "Cigarrillo", price: 1000, category: "otros" },
-            { id: 17, name: "Michelada", price: 2000, category: "coctel" },
-            { id: 18, name: "Agua", price: 3000, category: "bebida" },
-            { id: 19, name: "Cafe", price: 3000, category: "bebida" },
-            { id: 20, name: "Mani", price: 3000, category: "snack" },
-            { id: 21, name: "Coca Cola", price: 4000, category: "bebida" },
-            { id: 22, name: "Soda", price: 4000, category: "bebida" },
-            { id: 23, name: "Sprite", price: 4000, category: "bebida" },
-            { id: 24, name: "Ron con Cola", price: 28000, category: "coctel" },
-            { id: 25, name: "Pina Chill", price: 28000, category: "coctel" },
-            { id: 26, name: "Mojito", price: 28000, category: "coctel" },
-            { id: 27, name: "Vodka Martini", price: 40000, category: "coctel" },
-            { id: 28, name: "Pescera", price: 40000, category: "coctel" },
-            { id: 29, name: "Fuego de Bahia", price: 12000, category: "coctel" },
-            { id: 30, name: "Extasis Tropical", price: 12000, category: "coctel" },
-            { id: 31, name: "Seduccion Tropical", price: 12000, category: "coctel" },
-            { id: 32, name: "Mar de pasion", price: 12000, category: "coctel" },
-            { id: 33, name: "Atardecer Tropical", price: 12000, category: "coctel" },
-            { id: 34, name: "Naufragio", price: 12000, category: "coctel" },
-            { id: 35, name: "Brisa Acida", price: 12000, category: "coctel" },
-            { id: 36, name: "Tormenta Azul", price: 12000, category: "coctel" },
-            { id: 37, name: "Rayo Caribeno", price: 12000, category: "coctel" }
-        ];
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script type="module">
+        import { users, tables, products } from './Data.js';
 
         // State
         let currentUser = null;
@@ -1461,62 +1392,64 @@
                     hour12: true
                 }).toUpperCase();
                 
-                // Create receipt content
+                // Create receipt content centrado
                 receiptContent.innerHTML = `
-                    <div class="receipt-container">
-                        <div class="receipt-header">
-                            <h1 class="receipt-title">BAHIA CHILL</h1>
-                            <div class="receipt-subheader">
-                                <p>Comanda Digital</p>
-                                <p class="company-info">Bahia Chill S.A.S | NIT: 123456789-0</p>
+                    <div class="receipt-container flex justify-center">
+                        <div style="width:100%;">
+                            <div class="receipt-header">
+                                <h1 class="receipt-title">BAHIA CHILL</h1>
+                                <div class="receipt-subheader">
+                                    <p>Comanda Digital</p>
+                                    <p class="company-info">Bahia Chill S.A.S | NIT: 123456789-0</p>
+                                </div>
+                                <div class="receipt-meta">
+                                    <p>${formattedDate} - ${formattedTime}</p>
+                                    <p><span class="font-medium">Mesa:</span> ${currentTable.label}</p>
+                                    <p><span class="font-medium">Atendido por:</span> ${currentUser.username}</p>
+                                </div>
                             </div>
-                            <div class="receipt-meta">
-                                <p>${formattedDate} - ${formattedTime}</p>
-                                <p><span class="font-medium">Mesa:</span> ${currentTable.label}</p>
-                                <p><span class="font-medium">Atendido por:</span> ${currentUser.username}</p>
-                            </div>
-                        </div>
-                                            
-                        <table class="w-full mb-4">
-                            <thead>
-                                <tr class="border-b border-gray-200">
-                                    <th class="text-left py-2 text-sm font-medium">Producto</th>
-                                    <th class="text-right py-2 text-sm font-medium">Cant.</th>
-                                    <th class="text-right py-2 text-sm font-medium">Total</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${currentOrder.map(item => `
-                                    <tr class="border-b border-gray-100">
-                                        <td class="py-2 text-sm">
-                                            ${item.product.name}
-                                            ${item.notes ? `<br><span class="text-xs text-gray-500">${item.notes}</span>` : ''}
-                                        </td>
-                                        <td class="text-right py-2 text-sm">${item.quantity}</td>
-                                        <td class="text-right py-2 text-sm">$${(item.product.price * item.quantity).toLocaleString()}</td>
+                                                
+                            <table class="w-full mb-4">
+                                <thead>
+                                    <tr class="border-b border-gray-200">
+                                        <th class="text-left py-2 text-sm font-medium">Producto</th>
+                                        <th class="text-right py-2 text-sm font-medium">Cant.</th>
+                                        <th class="text-right py-2 text-sm font-medium">Total</th>
                                     </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                                            
-                        <div class="border-t border-gray-200 pt-3">
-                            <div class="flex justify-between font-semibold text-lg">
-                                <span>Total:</span>
-                                <span>$${total.toLocaleString()}</span>
+                                </thead>
+                                <tbody>
+                                    ${currentOrder.map(item => `
+                                        <tr class="border-b border-gray-100">
+                                            <td class="py-2 text-sm">
+                                                ${item.product.name}
+                                                ${item.notes ? `<br><span class="text-xs text-gray-500">${item.notes}</span>` : ''}
+                                            </td>
+                                            <td class="text-right py-2 text-sm">${item.quantity}</td>
+                                            <td class="text-right py-2 text-sm">$${(item.product.price * item.quantity).toLocaleString()}</td>
+                                        </tr>
+                                    `).join('')}
+                                </tbody>
+                            </table>
+                                                
+                            <div class="border-t border-gray-200 pt-3">
+                                <div class="flex justify-between font-semibold text-lg">
+                                    <span>Total:</span>
+                                    <span>$${total.toLocaleString()}</span>
+                                </div>
                             </div>
-                        </div>
-                                            
-                        ${customerName.value || customerId.value || customerContact.value ? `
-                        <div class="mt-6 border-t border-gray-200 pt-4">
-                            <h2 class="text-lg font-semibold mb-2">Datos del Cliente</h2>
-                            ${customerName.value ? `<p class="text-sm mb-1"><span class="font-medium">Nombre:</span> ${customerName.value}</p>` : ''}
-                            ${customerId.value ? `<p class="text-sm mb-1"><span class="font-medium">${customerIdType.options[customerIdType.selectedIndex].text}:</span> ${customerId.value}</p>` : ''}
-                            ${customerContact.value ? `<p class="text-sm"><span class="font-medium">Contacto:</span> ${customerContact.value}</p>` : ''}
-                        </div>
-                        ` : ''}
-                                            
-                        <div class="receipt-footer">
-                            <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
+                                                
+                            ${customerName.value || customerId.value || customerContact.value ? `
+                            <div class="mt-6 border-t border-gray-200 pt-4">
+                                <h2 class="text-lg font-semibold mb-2">Datos del Cliente</h2>
+                                ${customerName.value ? `<p class="text-sm mb-1"><span class="font-medium">Nombre:</span> ${customerName.value}</p>` : ''}
+                                ${customerId.value ? `<p class="text-sm mb-1"><span class="font-medium">${customerIdType.options[customerIdType.selectedIndex].text}:</span> ${customerId.value}</p>` : ''}
+                                ${customerContact.value ? `<p class="text-sm"><span class="font-medium">Contacto:</span> ${customerContact.value}</p>` : ''}
+                            </div>
+                            ` : ''}
+                                                
+                            <div class="receipt-footer">
+                                <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
+                            </div>
                         </div>
                     </div>
                 `;
