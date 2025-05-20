@@ -1386,17 +1386,34 @@
                     hour12: true
                 }).toUpperCase();
                 const totalPreview = currentOrder.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
+                // Construir tabla de productos con notas debajo del nombre
+                const productosHTML = currentOrder.map(item => `
+                    <tr class="border-b border-gray-100">
+                        <td class="py-2 text-sm">
+                            ${item.product.name}
+                            ${item.notes ? `<br><span class='text-xs text-gray-500'>${item.notes}</span>` : ''}
+                        </td>
+                        <td class="text-right py-2 text-sm">${item.quantity}</td>
+                        <td class="text-right py-2 text-sm">$${(item.product.price * item.quantity).toLocaleString()}</td>
+                    </tr>
+                `).join('');
+                // Datos del cliente solo si hay alguno
+                let datosCliente = '';
+                if (customerName.value || customerId.value || customerContact.value) {
+                    datosCliente = `
+                        <div class="mt-2 mb-2 w-full">
+                            <h2 class="text-base font-semibold mb-1">Datos del Cliente</h2>
+                            ${customerName.value ? `<p class='text-sm mb-1'><span class='font-medium'>Nombre:</span> ${customerName.value}</p>` : ''}
+                            ${customerId.value ? `<p class='text-sm mb-1'><span class='font-medium'>${customerIdType.options[customerIdType.selectedIndex].text}:</span> ${customerId.value}</p>` : ''}
+                            ${customerContact.value ? `<p class='text-sm mb-1'><span class='font-medium'>Contacto:</span> ${customerContact.value}</p>` : ''}
+                        </div>
+                    `;
+                }
                 receiptContent.innerHTML = `
                     <div class="receipt-container" style="max-width: 350px; margin: 0 auto;">
                         <div style="display: flex; flex-direction: column; align-items: center;">
-                            <div class="receipt-header" style="border-bottom: none;">
+                            <div class="receipt-header" style="border-bottom: none; margin-bottom: 0;">
                                 <h1 class="receipt-title" style="color: #3d819d;">BAHIA CHILL</h1>
-                                <div class="receipt-subheader">
-                                    <p>Comanda Digital</p>
-                                </div>
-                            </div>
-                            <div class="receipt-header" style="border-bottom: none; margin-top: 0;">
-                                <h1 class="receipt-title" style="color: #3d819d; font-size: 20px;">BAHIA CHILL</h1>
                                 <div class="receipt-subheader">
                                     <p>Comanda Digital</p>
                                 </div>
@@ -1416,32 +1433,17 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    ${currentOrder.map(item => `
-                                        <tr class="border-b border-gray-100">
-                                            <td class="py-2 text-sm">
-                                                ${item.product.name}
-                                                ${item.notes ? `<br><span class="text-xs text-gray-500">${item.notes}</span>` : ''}
-                                            </td>
-                                            <td class="text-right py-2 text-sm">${item.quantity}</td>
-                                            <td class="text-right py-2 text-sm">$${(item.product.price * item.quantity).toLocaleString()}</td>
-                                        </tr>
-                                    `).join('')}
+                                    ${productosHTML}
                                 </tbody>
                             </table>
-                            <div class="border-t border-gray-200 pt-3 mb-2" style="width: 100%;">
+                            <div class="border-t border-gray-200 pt-3 mb-2 w-full">
                                 <div class="flex justify-between font-semibold text-lg">
                                     <span>Total:</span>
                                     <span>$${totalPreview.toLocaleString()}</span>
                                 </div>
                             </div>
-                            <div class="mt-2 mb-2" style="width: 100%;">
-                                <h2 class="text-base font-semibold mb-1">Datos del Cliente</h2>
-                                <p class="text-sm mb-1"><span class="font-medium">(Nombre o Razon Social):</span> ${customerName.value || '---'}</p>
-                                <p class="text-sm mb-1"><span class="font-medium">(Tipo de documento):</span> ${customerId.value ? customerIdType.options[customerIdType.selectedIndex].text : '---'}</p>
-                                <p class="text-sm mb-1"><span class="font-medium">(Número de documento):</span> ${customerId.value || '---'}</p>
-                                <p class="text-sm mb-1"><span class="font-medium">(Contacto o correo):</span> ${customerContact.value || '---'}</p>
-                            </div>
-                            <div class="receipt-footer" style="width: 100%;">
+                            ${datosCliente}
+                            <div class="receipt-footer w-full">
                                 <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
                             </div>
                             <div style="width: 100%; text-align: center; margin-top: 10px;">
