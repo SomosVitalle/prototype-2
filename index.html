@@ -1373,22 +1373,41 @@
                     hour12: true
                 }).toUpperCase();
                 
-                // Create receipt content centrado para el preview
+                // Create receipt content para el preview con toda la información y formato solicitado
+                const nowPreview = new Date();
+                const formattedDatePreview = nowPreview.toLocaleDateString('es-CO', {
+                    day: 'numeric',
+                    month: 'long',
+                    year: 'numeric'
+                });
+                const formattedTimePreview = nowPreview.toLocaleTimeString('es-CO', {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                }).toUpperCase();
+                const totalPreview = currentOrder.reduce((acc, item) => acc + item.product.price * item.quantity, 0);
                 receiptContent.innerHTML = `
                     <div class="receipt-container" style="max-width: 350px; margin: 0 auto;">
                         <div style="display: flex; flex-direction: column; align-items: center;">
-                            <div class="receipt-header">
-                                <h1 class="receipt-title">BAHIA CHILL</h1>
+                            <div class="receipt-header" style="border-bottom: none;">
+                                <h1 class="receipt-title" style="color: #3d819d;">BAHIA CHILL</h1>
                                 <div class="receipt-subheader">
                                     <p>Comanda Digital</p>
                                 </div>
                             </div>
+                            <div class="receipt-header" style="border-bottom: none; margin-top: 0;">
+                                <h1 class="receipt-title" style="color: #3d819d; font-size: 20px;">BAHIA CHILL</h1>
+                                <div class="receipt-subheader">
+                                    <p>Comanda Digital</p>
+                                </div>
+                            </div>
+                            <div class="company-info" style="margin-top: 0;">Bahia Chill S.A.S | NIT: 123456789-0</div>
                             <div class="receipt-meta" style="margin-bottom: 10px;">
-                                <p>${new Date().toLocaleDateString('es-CO', {day: 'numeric', month: 'long', year: 'numeric'})} - ${new Date().toLocaleTimeString('es-CO', {hour: '2-digit', minute: '2-digit', hour12: true}).toUpperCase()}</p>
+                                <p>${formattedDatePreview} - ${formattedTimePreview}</p>
                                 <p><span class="font-medium">Mesa:</span> ${currentTable.label}</p>
                                 <p><span class="font-medium">Atendido por:</span> ${currentUser.username}</p>
                             </div>
-                            <table class="w-full mb-4">
+                            <table class="w-full mb-4" style="margin-top: 10px;">
                                 <thead>
                                     <tr class="border-b border-gray-200">
                                         <th class="text-left py-2 text-sm font-medium">Producto</th>
@@ -1409,23 +1428,39 @@
                                     `).join('')}
                                 </tbody>
                             </table>
-                            <div class="border-t border-gray-200 pt-3 mb-2">
+                            <div class="border-t border-gray-200 pt-3 mb-2" style="width: 100%;">
                                 <div class="flex justify-between font-semibold text-lg">
                                     <span>Total:</span>
-                                    <span>$${currentOrder.reduce((acc, item) => acc + item.product.price * item.quantity, 0).toLocaleString()}</span>
+                                    <span>$${totalPreview.toLocaleString()}</span>
                                 </div>
                             </div>
-                            ${(customerName.value || customerId.value || customerContact.value) ? `
-                            <div class="mt-2 mb-2">
+                            <div class="mt-2 mb-2" style="width: 100%;">
                                 <h2 class="text-base font-semibold mb-1">Datos del Cliente</h2>
-                                ${customerName.value ? `<p class="text-sm mb-1"><span class="font-medium">Nombre:</span> ${customerName.value}</p>` : ''}
-                                ${customerId.value ? `<p class="text-sm mb-1"><span class="font-medium">${customerIdType.options[customerIdType.selectedIndex].text}:</span> ${customerId.value}</p>` : ''}
-                                ${customerContact.value ? `<p class="text-sm"><span class="font-medium">Contacto:</span> ${customerContact.value}</p>` : ''}
+                                <p class="text-sm mb-1"><span class="font-medium">(Nombre o Razon Social):</span> ${customerName.value || '---'}</p>
+                                <p class="text-sm mb-1"><span class="font-medium">(Tipo de documento):</span> ${customerId.value ? customerIdType.options[customerIdType.selectedIndex].text : '---'}</p>
+                                <p class="text-sm mb-1"><span class="font-medium">(Número de documento):</span> ${customerId.value || '---'}</p>
+                                <p class="text-sm mb-1"><span class="font-medium">(Contacto o correo):</span> ${customerContact.value || '---'}</p>
                             </div>
-                            ` : ''}
+                            <div class="receipt-footer" style="width: 100%;">
+                                <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
+                            </div>
+                            <div style="width: 100%; text-align: center; margin-top: 10px;">
+                                <p class="text-sm text-gray-600">Gracias por su visita. ¡Vuelva pronto!</p>
+                            </div>
                         </div>
                     </div>
                 `;
+                
+                // Mueve el botón de imprimir debajo del contenido y elimina el de PDF
+                const modalFooter = receiptModal.querySelector('.p-4.border-t');
+                if (modalFooter) {
+                    modalFooter.innerHTML = `
+                        <button id="print-receipt-btn" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 flex items-center justify-center" style="width:100%;font-weight:600;">
+                            <i class="fas fa-print mr-2"></i>Imprimir
+                        </button>
+                    `;
+                    document.getElementById('print-receipt-btn').onclick = printReceipt;
+                }
                 
                 // Show receipt modal
                 receiptModal.classList.remove('hidden');
