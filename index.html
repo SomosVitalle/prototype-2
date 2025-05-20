@@ -133,8 +133,6 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 1000;
-            padding: 1rem;
         }
         
         .receipt-content {
@@ -144,6 +142,10 @@
             width: 100%;
             max-height: 90vh;
             overflow-y: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
         }
         
         /* Search results dropdown */
@@ -293,7 +295,7 @@
         }
         
         /* Receipt styles */
-        ./* Encabezado del recibo */
+        /* Encabezado del recibo */
 .receipt-header {
     text-align: center;
     border-bottom: 2px solid #3d819d; /* Mantiene el borde azul original */
@@ -346,9 +348,18 @@
                 height: auto;
                 margin: 0;
                 padding: 0;
+                display: flex !important;
+                justify-content: center !important;
+                align-items: flex-start !important;
+                width: 100vw !important;
+                min-height: 100vh !important;
             }
             .no-print {
                 display: none !important;
+            }
+            body {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
             }
         }
         
@@ -393,6 +404,8 @@
             padding: 5px;
             background: white;
             font-family: 'Poppins', sans-serif;
+            margin: 0 auto;
+            display: block;
         }
 
         .receipt-header {
@@ -529,21 +542,20 @@
         @media print {
             body {
                 -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
             }
             
+            #receipt-content {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: flex-start !important;
+                width: 100vw !important;
+                min-height: 100vh !important;
+            }
             .receipt-container {
-                width: 80mm !important;
-                max-width: 80mm !important;
-                padding: 5px !important;
-                font-size: 10px !important;
-            }
-            
-            .receipt-title {
-                font-size: 18px !important;
-            }
-            
-            .two-columns {
-                column-count: 1 !important;
+                margin: 0 auto !important;
+                display: block !important;
+                float: none !important;
             }
         }
 
@@ -557,6 +569,43 @@
             background-color: rgba(255,255,255,0.8);
             padding: 2px 5px;
             border-radius: 3px;
+        }
+        
+        /* Centrado de la factura en el modal y en impresión */
+        .receipt-modal {
+            /* ...existing code... */
+            align-items: center;
+            justify-content: center;
+        }
+        .receipt-content {
+            /* ...existing code... */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0 auto;
+        }
+        .receipt-container {
+            /* ...existing code... */
+            margin: 0 auto;
+            display: block;
+        }
+        @media print {
+            #receipt-content {
+                display: flex !important;
+                justify-content: center !important;
+                align-items: flex-start !important;
+                width: 100vw !important;
+                min-height: 100vh !important;
+            }
+            .receipt-container {
+                margin: 0 auto !important;
+                display: block !important;
+                float: none !important;
+            }
+            body {
+                print-color-adjust: exact;
+                -webkit-print-color-adjust: exact;
+            }
         }
     </style>
 </head>
@@ -1394,8 +1443,8 @@
                 
                 // Create receipt content centrado
                 receiptContent.innerHTML = `
-                    <div class="receipt-container flex justify-center">
-                        <div style="width:100%;">
+                    <div class="receipt-container">
+                        <div style="width:100%; display: flex; flex-direction: column; align-items: center;">
                             <div class="receipt-header">
                                 <h1 class="receipt-title">BAHIA CHILL</h1>
                                 <div class="receipt-subheader">
@@ -1408,7 +1457,6 @@
                                     <p><span class="font-medium">Atendido por:</span> ${currentUser.username}</p>
                                 </div>
                             </div>
-                                                
                             <table class="w-full mb-4">
                                 <thead>
                                     <tr class="border-b border-gray-200">
@@ -1430,14 +1478,12 @@
                                     `).join('')}
                                 </tbody>
                             </table>
-                                                
                             <div class="border-t border-gray-200 pt-3">
                                 <div class="flex justify-between font-semibold text-lg">
                                     <span>Total:</span>
                                     <span>$${total.toLocaleString()}</span>
                                 </div>
                             </div>
-                                                
                             ${customerName.value || customerId.value || customerContact.value ? `
                             <div class="mt-6 border-t border-gray-200 pt-4">
                                 <h2 class="text-lg font-semibold mb-2">Datos del Cliente</h2>
@@ -1446,7 +1492,6 @@
                                 ${customerContact.value ? `<p class="text-sm"><span class="font-medium">Contacto:</span> ${customerContact.value}</p>` : ''}
                             </div>
                             ` : ''}
-                                                
                             <div class="receipt-footer">
                                 <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
                             </div>
@@ -1548,6 +1593,10 @@
                 // Create page content
                 const pageContent = document.createElement('div');
                 pageContent.className = 'receipt-container';
+                pageContent.style.margin = '0 auto';
+                pageContent.style.display = 'flex';
+                pageContent.style.flexDirection = 'column';
+                pageContent.style.alignItems = 'center';
                 pageContent.style.width = isMobile ? '80mm' : '100%';
                 pageContent.style.padding = isMobile ? '5px' : '15px';
                 pageContent.style.fontSize = isMobile ? '10px' : '12px';
