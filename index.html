@@ -1374,6 +1374,7 @@
                 }).toUpperCase();
                 
                 // Create receipt content para el preview con toda la información y formato solicitado
+                // Usa variables únicas para el preview
                 const nowPreview = new Date();
                 const formattedDatePreview = nowPreview.toLocaleDateString('es-CO', {
                     day: 'numeric',
@@ -1445,21 +1446,20 @@
                             ${datosCliente}
                             <div class="receipt-footer w-full">
                                 <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
-                            </div>
-                            <div style="width: 100%; text-align: center; margin-top: 10px;">
-                                <p class="text-sm text-gray-600">Gracias por su visita. ¡Vuelva pronto!</p>
+                                <p class="text-sm text-gray-600" style="margin-top:8px;">Gracias por su visita. ¡Vuelva pronto!</p>
                             </div>
                         </div>
                     </div>
                 `;
-                
-                // Mueve el botón de imprimir debajo del contenido y elimina el de PDF
+                // Mueve el botón de imprimir debajo del contenido y centrado
                 const modalFooter = receiptModal.querySelector('.p-4.border-t');
                 if (modalFooter) {
                     modalFooter.innerHTML = `
-                        <button id="print-receipt-btn" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 flex items-center justify-center" style="width:100%;font-weight:600;">
-                            <i class="fas fa-print mr-2"></i>Imprimir
-                        </button>
+                        <div style="width:100%;display:flex;justify-content:center;align-items:center;">
+                            <button id="print-receipt-btn" class="px-4 py-2 bg-primary text-white rounded-md hover:bg-opacity-90 flex items-center justify-center" style="width:100%;font-weight:600;max-width:300px;">
+                                <i class="fas fa-print mr-2"></i>Imprimir
+                            </button>
+                        </div>
                     `;
                     document.getElementById('print-receipt-btn').onclick = printReceipt;
                 }
