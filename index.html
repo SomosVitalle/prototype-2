@@ -542,20 +542,24 @@
         @media print {
             body {
                 -webkit-print-color-adjust: exact;
-                print-color-adjust: exact;
             }
             
-            #receipt-content {
-                display: flex !important;
-                justify-content: center !important;
-                align-items: flex-start !important;
-                width: 100vw !important;
-                min-height: 100vh !important;
-            }
             .receipt-container {
+                width: 80mm !important;
+                max-width: 80mm !important;
+                padding: 5px !important;
+                font-size: 10px !important;
                 margin: 0 auto !important;
                 display: block !important;
                 float: none !important;
+            }
+            
+            .receipt-title {
+                font-size: 18px !important;
+            }
+            
+            .two-columns {
+                column-count: 1 !important;
             }
         }
 
@@ -571,21 +575,19 @@
             border-radius: 3px;
         }
         
-        /* Centrado de la factura en el modal y en impresión */
+        /* Centrado de la factura en el modal, PDF e impresión */
         .receipt-modal {
-            /* ...existing code... */
+            display: flex;
             align-items: center;
             justify-content: center;
         }
         .receipt-content {
-            /* ...existing code... */
             display: flex;
             justify-content: center;
             align-items: center;
             margin: 0 auto;
         }
         .receipt-container {
-            /* ...existing code... */
             margin: 0 auto;
             display: block;
         }
@@ -1593,72 +1595,70 @@
                 // Create page content
                 const pageContent = document.createElement('div');
                 pageContent.className = 'receipt-container';
-                pageContent.style.margin = '0 auto';
-                pageContent.style.display = 'flex';
-                pageContent.style.flexDirection = 'column';
-                pageContent.style.alignItems = 'center';
                 pageContent.style.width = isMobile ? '80mm' : '100%';
                 pageContent.style.padding = isMobile ? '5px' : '15px';
                 pageContent.style.fontSize = isMobile ? '10px' : '12px';
-                
+                pageContent.style.display = 'flex';
+                pageContent.style.justifyContent = 'center';
+                pageContent.style.alignItems = 'center';
+
                 pageContent.innerHTML = `
-                    <div class="receipt-header">
-                        <h1 class="receipt-title" style="font-size: ${isMobile ? '18px' : '22px'}">BAHIA CHILL</h1>
-                        <div class="receipt-subheader">
-                            <p style="font-size: ${isMobile ? '12px' : '14px'}">Comanda Digital</p>
-                            <p class="company-info">Bahia Chill S.A.S | NIT: 123456789-0</p>
+                    <div style="width:100%; display: flex; flex-direction: column; align-items: center;">
+                        <div class="receipt-header">
+                            <h1 class="receipt-title" style="font-size: ${isMobile ? '18px' : '22px'}">BAHIA CHILL</h1>
+                            <div class="receipt-subheader">
+                                <p style="font-size: ${isMobile ? '12px' : '14px'}">Comanda Digital</p>
+                                <p class="company-info">Bahia Chill S.A.S | NIT: 123456789-0</p>
+                            </div>
+                            <div class="receipt-meta">
+                                <p>${formattedDate} - ${formattedTime}</p>
+                                <p><span class="font-medium">Mesa:</span> ${currentTable.label}</p>
+                                <p><span class="font-medium">Atendido por:</span> ${currentUser.username}</p>
+                                ${totalPages > 1 ? `<p><span class="font-medium">Página:</span> ${pageIndex + 1} de ${totalPages}</p>` : ''}
+                            </div>
                         </div>
-                        <div class="receipt-meta">
-                            <p>${formattedDate} - ${formattedTime}</p>
-                            <p><span class="font-medium">Mesa:</span> ${currentTable.label}</p>
-                            <p><span class="font-medium">Atendido por:</span> ${currentUser.username}</p>
-                            ${totalPages > 1 ? `<p><span class="font-medium">Página:</span> ${pageIndex + 1} de ${totalPages}</p>` : ''}
-                        </div>
-                    </div>
-                                        
-                    <table style="width: 100%; margin-bottom: ${isMobile ? '10px' : '15px'};">
-                        <thead>
-                            <tr class="border-b border-gray-200">
-                                <th class="text-left py-2" style="font-size: ${isMobile ? '10px' : '12px'}">Producto</th>
-                                <th class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">Cant.</th>
-                                <th class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${pageProducts.map(item => `
-                                <tr class="border-b border-gray-100">
-                                    <td class="py-2" style="font-size: ${isMobile ? '10px' : '12px'}">
-                                        ${item.product.name}
-                                        ${item.notes ? `<br><span class="text-xs text-gray-500">${item.notes}</span>` : ''}
-                                    </td>
-                                    <td class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">${item.quantity}</td>
-                                    <td class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">$${(item.product.price * item.quantity).toLocaleString()}</td>
+                        <table style="width: 100%; margin-bottom: ${isMobile ? '10px' : '15px'};">
+                            <thead>
+                                <tr class="border-b border-gray-200">
+                                    <th class="text-left py-2" style="font-size: ${isMobile ? '10px' : '12px'}">Producto</th>
+                                    <th class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">Cant.</th>
+                                    <th class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">Total</th>
                                 </tr>
-                            `).join('')}
-                        </tbody>
-                    </table>
-                                        
-                    <div class="border-t border-gray-200 pt-3">
-                        <div class="flex justify-between font-semibold" style="font-size: ${isMobile ? '14px' : '16px'}">
-                            <span>Total ${totalPages > 1 ? `(Página ${pageIndex + 1})` : ''}:</span>
-                            <span>$${pageTotal.toLocaleString()}</span>
+                            </thead>
+                            <tbody>
+                                ${pageProducts.map(item => `
+                                    <tr class="border-b border-gray-100">
+                                        <td class="py-2" style="font-size: ${isMobile ? '10px' : '12px'}">
+                                            ${item.product.name}
+                                            ${item.notes ? `<br><span class="text-xs text-gray-500">${item.notes}</span>` : ''}
+                                        </td>
+                                        <td class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">${item.quantity}</td>
+                                        <td class="text-right py-2" style="font-size: ${isMobile ? '10px' : '12px'}">$${(item.product.price * item.quantity).toLocaleString()}</td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                        <div class="border-t border-gray-200 pt-3">
+                            <div class="flex justify-between font-semibold" style="font-size: ${isMobile ? '14px' : '16px'}">
+                                <span>Total ${totalPages > 1 ? `(Página ${pageIndex + 1})` : ''}:</span>
+                                <span>$${pageTotal.toLocaleString()}</span>
+                            </div>
                         </div>
+                        ${pageIndex === totalPages - 1 ? `
+                        ${customerName.value || customerId.value || customerContact.value ? `
+                        <div class="mt-6 border-t border-gray-200 pt-4">
+                            <h2 class="text-lg font-semibold mb-2">Datos del Cliente</h2>
+                            ${customerName.value ? `<p class="text-sm mb-1"><span class="font-medium">Nombre:</span> ${customerName.value}</p>` : ''}
+                            ${customerId.value ? `<p class="text-sm mb-1"><span class="font-medium">${customerIdType.options[customerIdType.selectedIndex].text}:</span> ${customerId.value}</p>` : ''}
+                            ${customerContact.value ? `<p class="text-sm"><span class="font-medium">Contacto:</span> ${customerContact.value}</p>` : ''}
+                        </div>
+                        ` : ''}
+                        
+                        <div class="receipt-footer">
+                            <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
+                        </div>
+                        ` : ''}
                     </div>
-                                        
-                    ${pageIndex === totalPages - 1 ? `
-                    ${customerName.value || customerId.value || customerContact.value ? `
-                    <div class="mt-6 border-t border-gray-200 pt-4">
-                        <h2 class="text-lg font-semibold mb-2">Datos del Cliente</h2>
-                        ${customerName.value ? `<p class="text-sm mb-1"><span class="font-medium">Nombre:</span> ${customerName.value}</p>` : ''}
-                        ${customerId.value ? `<p class="text-sm mb-1"><span class="font-medium">${customerIdType.options[customerIdType.selectedIndex].text}:</span> ${customerId.value}</p>` : ''}
-                        ${customerContact.value ? `<p class="text-sm"><span class="font-medium">Contacto:</span> ${customerContact.value}</p>` : ''}
-                    </div>
-                    ` : ''}
-                    
-                    <div class="receipt-footer">
-                        <p class="footer-text"><strong>Sistema de facturación de Bahia Chill ®</strong><br><strong>Todos los derechos reservados</strong></p>
-                    </div>
-                    ` : ''}
                 `;
                 
                 tempContainer.innerHTML = '';
